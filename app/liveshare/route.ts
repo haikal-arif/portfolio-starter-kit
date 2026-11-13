@@ -1,9 +1,10 @@
 // Served as a bare HTML document: route handlers are not wrapped by app/layout.tsx,
 // so the portfolio navbar and footer never render here.
 //
-// Link-preview crawlers (WhatsApp, Slack, etc.) read the og:* tags and never run
-// the script. Browsers run the script as soon as the HTML is parsed.
-const TARGET = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+// Link-preview crawlers (WhatsApp, Slack, etc.) read the og:* tags only.
+// Browsers get a full-screen YouTube embed that autoplays muted (browsers block
+// unmuted autoplay); the viewer can unmute from the player controls.
+const EMBED = 'https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&mute=1&playsinline=1'
 const TITLE = 'Share your moment with LiveShare'
 const DESCRIPTION = 'Share your moment with LiveShare. Live Streams, Fast via QR.'
 const URL = 'https://portfolio-blog-starter.vercel.app/liveshare'
@@ -23,9 +24,19 @@ const html = `<!doctype html>
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:title" content="${TITLE}" />
 <meta name="twitter:description" content="${DESCRIPTION}" />
-<script>window.location.replace(${JSON.stringify(TARGET)});</script>
+<style>
+html, body { margin: 0; height: 100%; background: #000; }
+iframe { position: fixed; inset: 0; width: 100%; height: 100%; border: 0; }
+</style>
 </head>
-<body></body>
+<body>
+<iframe
+  src="${EMBED}"
+  title="${TITLE}"
+  allow="autoplay; encrypted-media; picture-in-picture"
+  allowfullscreen
+></iframe>
+</body>
 </html>
 `
 
